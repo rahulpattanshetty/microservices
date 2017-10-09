@@ -1,0 +1,39 @@
+<h1>CartLineItems#index</h1>
+
+<%total=0%>
+<table border="1">
+<thead>
+	<tr>
+		<th>Name</th>
+		<th>Quantity</th>
+		<th>Price</th>
+		<th>Action</th>
+	</tr>
+</thead>
+<tbody>
+	
+	<%@cart_line_items.each do |item|%>
+	<tr>
+		<%response = HTTParty.get("http://localhost:3002/api/v1/products/#{item["product_id"]}")%>
+		<%product = JSON.parse(response.body)%>
+ 	   <td><%=product["name"]%></td>
+	    <td>	    	
+	    	<%= form_tag("http://localhost:3003/api/v1/line_items",method: :patch) do %>
+	    	<%= select_tag :quantity, options_for_select(1..10,item["quantity"])%>
+	    	<%= submit_tag "Update"%>
+	    	<%end%>
+	    </td>
+	    <td><%=product["price"]%></td>
+	    <%total += item["quantity"] * product["price"]%>
+	    <td><%=link_to "Remove", cart_line_item_path(item["id"]),method: :delete%></td>
+	</tr>
+	<%end%>
+<%#HTTParty.delete("http://localhost:3003/api/v1/line_items/#{self.user_id}")%>	
+</tbody>
+</table>
+<%=total%>
+<%=form_tag("http://localhost:3004/api/v1/orders", method: :post) do%>
+	<%=hidden_field_tag :user_id, current_user.id%>
+	<%=hidden_field_tag :total, total %>
+	<%=submit_tag "checkout"%>
+<%end%>

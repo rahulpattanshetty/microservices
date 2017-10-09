@@ -1,0 +1,19 @@
+<h1>Products#new</h1>
+<p>Find me in app/views/products/new.html.erb</p>
+
+<%= form_for @product do |f|%>
+	<%=f.label :name%>
+	<%=f.text_field :name%><br>
+
+	<%=f.label :price%>
+	<%=f.text_field :price%><br>
+
+	<%=f.label :category%>
+	<%=f.select :category_id, options_for_select(@result.collect {|category| [category['name'], category['id']]})%><br>
+
+	
+	
+	
+	<br>
+	<%=f.submit%>
+<%end%>

@@ -1,0 +1,17 @@
+<h2>Category</h2>
+
+Name:<%=@category["name"]%>
+<br><br>
+<strong>Product Listing</strong><br>
+
+<%if @products.is_a?(Hash)%>
+	<p>No products are available for this category</p>
+<%else%>
+	<ul>
+		<%@products.each do |product|%>
+			<%if @category["id"] == product["category_id"]%>
+				<li><%=link_to product["name"],site_show_product_path(product["id"])%></li>
+			<%end%>
+		<%end%>
+	</ul>
+<%end%>
